@@ -23,12 +23,13 @@ int		        main(int ac, char **av)
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 	
-    glUseProgram(env.shaders.program);
 
     while (!glfwWindowShouldClose((&env)->win.ptr))
     {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         key_controls(&env);
+
+    	glUseProgram(env.shaders.program);
 		
 		// BEGIN DRAWING
 
