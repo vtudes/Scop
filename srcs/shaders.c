@@ -12,6 +12,9 @@ static GLuint   create_program(GLuint shader_vert, GLuint shader_frag)
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success)
         error("Creation de shader program a po marché");
+    glDetachShader(program, shader_vert);
+    glDetachShader(program, shader_frag);
+
     glDeleteShader(shader_vert);
     glDeleteShader(shader_frag);
     return(program);
@@ -53,7 +56,9 @@ static GLuint   create_shader(char *filename, int type)
 	free((void*)shader_source);
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success)
+	{
 		error("shader compilation failed.");
+	}
 	return (shader);
 }
 
@@ -63,8 +68,8 @@ void            create_shader_program(t_env *env)
     GLuint  shader_frag;
 
     ft_putendl("Grosse teuch");
-    shader_vert = create_shader("./shader/vertex_shaders", GL_VERTEX_SHADER);
-	shader_frag = create_shader("./shader/fragment_shaders", GL_FRAGMENT_SHADER);
+	shader_vert = create_shader("./shader/SimpleVertexShader.vertexshader", GL_VERTEX_SHADER);
+    shader_frag = create_shader("./shader/SimpleFragmentShaders.fragmentshaders", GL_FRAGMENT_SHADER);
     env->shaders.program =  create_program(shader_vert, shader_frag);
     //env->shaders.mvp_loc = glGetUniformLocation(env->shaders.program, "MVP");
     //env->shaders.vpos_loc = glGetUniformLocation(env->shaders.program, "vPos");

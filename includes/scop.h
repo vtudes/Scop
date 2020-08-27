@@ -8,7 +8,9 @@
 # include <errno.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <OpenGL/gl3.h>
+# include <GL/glew.h>
+// # include <OpenGL/gl3.h>
+#define GL_GLEXT_PROTOTYPES
 # include <GLFW/glfw3.h>
 
 # define OPENGL_VERSION "4.0"
@@ -113,7 +115,7 @@ void       key_controls(t_env *env);
 */
 void            create_shader_program(t_env *env);
 void        	attrib(void);
-void     		run_render(t_env *env);
+void     		run_render();
 
 
 #endif

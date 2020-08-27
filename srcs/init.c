@@ -12,6 +12,7 @@ static void init_window(t_env *env)
         exit(EXIT_FAILURE);
     }
 	glfwMakeContextCurrent(env->win.ptr);
+	glewInit();
 	glfwGetFramebufferSize(env->win.ptr, &width, &height);
 	glViewport(0, 0, width, height);
     glfwSetInputMode(env->win.ptr, GLFW_STICKY_KEYS, 1);

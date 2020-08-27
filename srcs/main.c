@@ -1,21 +1,10 @@
 #include "scop.h"
 
-
-void     run_render(t_env *env)
-{
-    (void)env;
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-    glUseProgram(env->shaders.program);
-
-    glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-    glDisableVertexAttribArray(0);
-
-    glfwPollEvents();
-}
+static const GLfloat g_vertex_buffer_data[] = {
+   -1.0f, -1.0f, 0.0f,
+   1.0f, -1.0f, 0.0f,
+   0.0f,  1.0f, 0.0f,
+};
 
 int		        main(int ac, char **av)
 {
@@ -23,16 +12,39 @@ int		        main(int ac, char **av)
 
     init(&env, ac, av);
     load_object(&env, env.obj.filename);
-    printf("%s\n", glfwGetVersionString());
     create_shader_program(&env);
-    attrib();
+
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+
+	GLuint vertexbuffer;
+	glGenBuffers(1, &vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+    glUseProgram(env.shaders.program);
+
     while (!glfwWindowShouldClose((&env)->win.ptr))
     {
+		glClear( GL_COLOR_BUFFER_BIT );
         key_controls(&env);
-        run_render(&env);
-
+		
+		// BEGIN DRAWING
+		
+		glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+		
+		// END DRAWING
+    	
+		glfwSwapBuffers(env.win.ptr);
+    	glfwPollEvents();
     }
+    glDisableVertexAttribArray(0);
     glfwTerminate();
-    //create_shader_program(&env);
 	return (0);
 }
